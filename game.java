@@ -38,6 +38,10 @@ public class game
         public boolean isAce(){
             return value == "A"; 
         }
+        
+        public String getImagePath(){
+            return "./cards/" + toString() + ".png";
+        }
     }
     
     //array list to store cards
@@ -46,6 +50,22 @@ public class game
         
     game(){
         startGame();
+        
+        frame.setVisible(true); //creating window
+        frame.setSize(boardWidth, boardHeight);
+        frame.setLocationRelativeTo(null); // open the window at the centre of the screen
+        frame.setResizable(false); // you can't re-size the window
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        
+        gamePanel.setLayout(new BorderLayout());
+        gamePanel.setBackground(new Color(54, 101, 77));
+        frame.add(gamePanel);
+        
+        hitButton.setFocusable(false);
+        buttonPanel.add(hitButton);
+        stayButton.setFocusable(false);
+        buttonPanel.add(stayButton);
+        frame.add(buttonPanel,BorderLayout.SOUTH);
     }
     
     public void startGame(){
@@ -74,6 +94,35 @@ public class game
     ArrayList<Card> playerHand;
     int playerSum;
     int playerAceCount;
+    
+    // game window
+    int boardWidth = 600;
+    int boardHeight = 600;
+    
+    int cardWidth = 110;
+    int cardHeight = 154;
+    
+    JFrame frame = new JFrame("Black Jack");
+    JPanel gamePanel = new JPanel(){
+        @Override
+        public void paintComponent(Graphics g){
+            super.paintComponent(g);  
+            
+            //hidden card
+            Image hiddenCardImage = new ImageIcon(getClass().getResource("./cards/BACK.png")).getImage();
+            g.drawImage(hiddenCardImage, 20, 20, cardWidth, cardHeight, null);
+            
+            //draw dealers hand
+            for (int i = 0; i < dealerHand.size(); i++){
+                Card card = dealerHand.get(i);
+                Image cardImg = new ImageIcon(getClass().getResource(card.getImagePath())).getImage();
+                g.drawImage(cardImg, cardWidth + 25 + (cardWidth + 5)*i, 20, cardWidth, cardHeight, null);
+            }
+        }
+    };
+    JPanel buttonPanel = new JPanel();
+    JButton hitButton = new JButton("Hit");
+    JButton stayButton = new JButton("Stand");
 
     public void shuffleDeck(){
         for (int i = 0; i < deck.size(); i++){
