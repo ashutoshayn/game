@@ -1,4 +1,3 @@
- 
 /**
  * Write a description of class game here.
  *
@@ -66,6 +65,21 @@ public class game
         stayButton.setFocusable(false);
         buttonPanel.add(stayButton);
         frame.add(buttonPanel,BorderLayout.SOUTH);
+        
+        hitButton.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent e){
+                Card card = deck.remove(deck.size() - 1);
+                playerSum += card.getValue();
+                
+                if (card.isAce()) {
+                    playerAceCount = playerAceCount + 1;
+                }
+                
+                playerHand.add(card);
+                gamePanel.repaint();
+            }
+        });
+        gamePanel.repaint();
     }
     
     public void startGame(){
@@ -117,6 +131,13 @@ public class game
                 Card card = dealerHand.get(i);
                 Image cardImg = new ImageIcon(getClass().getResource(card.getImagePath())).getImage();
                 g.drawImage(cardImg, cardWidth + 25 + (cardWidth + 5)*i, 20, cardWidth, cardHeight, null);
+            }
+            
+            // draw players hand
+            for (int i = 0; i < playerHand.size(); i++){
+                Card card = playerHand.get(i);
+                Image cardImg = new ImageIcon(getClass().getResource(card.getImagePath())).getImage();
+                g.drawImage(cardImg, 20 + (cardWidth + 5)*i, 320, cardWidth, cardHeight, null);
             }
         }
     };
